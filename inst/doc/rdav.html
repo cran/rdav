@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Gunther Krauss" />
+
+<meta name="date" content="2025-10-20" />
+
+<title>rdav</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">rdav</h1>
+<h4 class="author">Gunther Krauss</h4>
+<h4 class="date">October 20, 2025</h4>
+
+
+
+<p>“rdav” is a simple WebDAV client to upload and download data from
+cloud services.</p>
+<div id="a-first-example" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> A first example</h1>
+<ul>
+<li>Load Data from a WebDAV server,</li>
+<li>read the downloaded file,</li>
+<li>create a plot from the data,</li>
+<li>save the plot as image and</li>
+<li>upload the image to the server.</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(rdav)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(<span class="st">&quot;https://cloud.example.com/remote.php/webdav/&quot;</span>, <span class="st">&quot;myusername&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">wd_download</span>(r, <span class="st">&quot;data/data.csv&quot;</span>, <span class="st">&quot;localdata/data.csv&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;localdata/data.csv&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">png</span>(<span class="st">&quot;data_plot.png&quot;</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="fu">plot</span>(data)</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="fu">wd_upload</span>(r, <span class="st">&quot;data_plot.png&quot;</span>, <span class="st">&quot;data_plot.png&quot;</span>)</span></code></pre></div>
+</div>
+<div id="webdav-owncloud-nextcloud" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> WebDAV, OwnCloud,
+NextCloud</h1>
+<p>The WebDAV protocol provides a framework to create, change and move
+documents on a server. Many cloud based storage systems provide WebDAV
+access, e.g. systems based on OwnCloud or NextCloud. This includes many
+cloud services offered by universities, organisations companies as well
+as many self hosted clouds on NAS or Raspberry Pi.</p>
+<p>To access WebDAV one typically needs the URL to the WebDAV server, an
+username and a password. There is also the possibility to share data via
+public links without password protection.</p>
+<p>Accounts on an OwnCloud or Nextcloud based server are typically
+addressed by WebDAV via the URL:
+<code>https://cloud.example.com/remote.php/webdav/</code>.</p>
+<p>When sharing data via a public link from those servers, the link is
+typically of the form<br />
+<code>https://cloud.example.com/s/yxcFKRWBJqYYzp4/</code><br />
+and will be used to access the files via a web browser. To access a
+public share via WebDAV, one has to use the URL:<br />
+<code>https://cloud.example.com/public.php/webdav/</code><br />
+As username one has to use the share token, i. e. the cryptic number and
+letter string of the share link following <code>/s/</code> - in the
+example above the username would be <code>yxcFKRWBJqYYzp4</code>.</p>
+</div>
+<div id="using-the-package-functions" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Using the package
+functions</h1>
+<div id="establishing-the-connection" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Establishing the
+connection</h2>
+<p>To interact with the WebDAV server, you have to create a connection
+via <code>wd_connect</code> by supplying the URL, username and
+password.</p>
+<p>In an interactive R session, you may omit the password when calling
+<code>wd_connect</code>. Then R will ask you to type the password.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># no password given, R will ask.</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(<span class="at">url =</span> <span class="st">&quot;https://cloud.example.com/remote.php/webdav/&quot;</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>                <span class="at">username =</span> <span class="st">&quot;myusername&quot;</span>)</span></code></pre></div>
+<p>When using WebDAV in a script, you have to pass the password to
+<code>wd_connect</code>. It is not good practice, to write the password
+literally in your script</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Don&quot;t do this! You would reveal your super secret password to others when</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co"># sharing your script.</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(<span class="at">url =</span> <span class="st">&quot;https://cloud.example.com/remote.php/webdav/&quot;</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>                <span class="at">username =</span> <span class="st">&quot;myusername&quot;</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>                <span class="at">password =</span> <span class="st">&quot;12345&quot;</span>)</span></code></pre></div>
+<p>Better use your system”s credential store (i. e. the password will be
+stored encrypted in your user account). You may use the package <a href="https://cran.r-project.org/package=keyring"><code>keyring</code></a>
+to access the system”s credential store.</p>
+<p>You once have to set a key / password combination on your computer by
+calling:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>keyring<span class="sc">::</span><span class="fu">key_set</span>(<span class="st">&quot;mycloud&quot;</span>, <span class="st">&quot;myusername&quot;</span>)</span></code></pre></div>
+<p>You will be asked for the password and then the credentials are
+stored on your system.</p>
+<p>In your scripts you can then use
+<code>keyring::get_key(&quot;mycloud&quot;,&quot;myusername&quot;)</code> to pass the stored
+password to <code>wd_connect</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(<span class="at">url =</span> <span class="st">&quot;https://cloud.example.com/remote.php/webdav/&quot;</span>,</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                <span class="at">username =</span> <span class="st">&quot;myusername&quot;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                <span class="at">password =</span> keyring<span class="sc">::</span><span class="fu">get_key</span>(<span class="st">&quot;mycloud&quot;</span>, <span class="st">&quot;myusername&quot;</span>))</span></code></pre></div>
+</div>
+<div id="downloading-and-uploading-data" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Downloading and
+uploading data</h2>
+<p>To download a file, you have to give the path of the filename on the
+server, as well as the path to the location where you want to store the
+file on your computer.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">wd_download</span>(r, <span class="st">&quot;data/data.csv&quot;</span>, <span class="st">&quot;localdata/data_new.csv&quot;</span>)</span></code></pre></div>
+<p>Instead of giving the full path of the target file, you can use only
+the directory name. Then the file will be stored in that folder with the
+same name as it has on the server.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">wd_download</span>(r, <span class="st">&quot;data/data.csv&quot;</span>, <span class="st">&quot;localdata&quot;</span>)</span></code></pre></div>
+<p>You can download full directories. All the data within the directory,
+including subdirectories will be downloaded.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">wd_download</span>(r, <span class="st">&quot;data&quot;</span>, <span class="st">&quot;localdata&quot;</span>)</span></code></pre></div>
+<p>For uploading data from your computer, you have to use
+<code>wd_upload</code> in a similar way as <code>wd_download</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">wd_upload</span>(r, <span class="st">&quot;localdata/data.csv&quot;</span>, <span class="st">&quot;data/data_new.csv&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">wd_upload</span>(r, <span class="st">&quot;localdata/data.csv&quot;</span>, <span class="st">&quot;data&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="fu">wd_upload</span>(r, <span class="st">&quot;localdata&quot;</span>, <span class="st">&quot;data&quot;</span>)</span></code></pre></div>
+<p>Notice:</p>
+<ul>
+<li>If you upload / download files into a directory, the target
+directory has to exist already.</li>
+<li>If you upload / download a directory, then the target directory will
+be created, if it does not exist. However, the parent directory have to
+exist already</li>
+</ul>
+</div>
+<div id="copy-move-delete-files-on-the-server" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Copy, move, delete
+files on the server</h2>
+<p>You can copy, move, delete files or directory on the server and
+create new directories.</p>
+<p>By default existing files will be overwritten when using copy and
+move operation, unless you specify the parameter
+<code>overwrite=FALSE</code>. Notice: Some WebDAV servers may behave
+differently and won’t overwrite files. In these case you have to delete
+files first.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">wd_copy</span>(r, <span class="st">&quot;actual.csv&quot;</span>, <span class="st">&quot;backup.csv&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">wd_move</span>(r, <span class="st">&quot;backup.csv&quot;</span>, <span class="st">&quot;backup-2024-02-27.csv&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">wd_move</span>(r, <span class="st">&quot;backup.csv&quot;</span>, <span class="st">&quot;backup-2024-02-27.csv&quot;</span>, <span class="at">overwrite =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">wd_delete</span>(r, <span class="st">&quot;obsolete.csv&quot;</span>)</span></code></pre></div>
+<p>You can create new directories.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">wd_mkdir</span>(r, <span class="st">&quot;data/soil/new&quot;</span>)</span></code></pre></div>
+<p>Notice that parent directories have to exist. If not, you have to
+create them first</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">wd_mkdir</span>(r, <span class="st">&quot;data/soil&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">wd_mkdir</span>(r, <span class="st">&quot;data/soil/new&quot;</span>)</span></code></pre></div>
+</div>
+<div id="get-informations-about-files-and-directories" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> Get informations
+about files and directories</h2>
+<p>You can get the list of files and subfolders as a character vector by
+using <code>wd_dir</code>. Using the parameter
+<code>full_names = TRUE</code> will give you the files with relative
+paths.</p>
+<p>To get more information about files, you can use the option
+<code>as_df = TRUE</code>. You will then get a data.frame with
+additional columns like size, last modification date and
+contenttype.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">wd_dir</span>(r) <span class="co"># get content of main folder</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="fu">wd_dir</span>(r, <span class="st">&quot;example&quot;</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="fu">wd_dir</span>(r, <span class="st">&quot;example&quot;</span>, <span class="at">full_names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="fu">wd_dir</span>(r, <span class="st">&quot;example&quot;</span>, <span class="at">as_df =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="security-considerations" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Security
+considerations</h1>
+<p>Here some thougths, how to better protect the data, if there is some
+risk that your password get’s disclosed by using it within scripts.</p>
+<div id="dont-put-passwords-in-your-code" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Don’t put passwords
+in your code</h2>
+<p>You should avoid putting passwords in your code. See the example in
+the sections above how to use system credential store.</p>
+</div>
+<div id="use-application-passwords-instead-of-account-passwords" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Use application
+passwords instead of account passwords</h2>
+<p>Some cloud services offer you the possibility to create additional
+application passwords. If you use an application password with
+<code>rdav</code>, and the password gets somehow disclosed, you can just
+delete the application password and create a new one. You don’t have to
+change then your account’s password.</p>
+</div>
+<div id="use-password-protected-public-shares-instead-direct-account" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Use password
+protected public shares instead direct account</h2>
+<p>Instead accessing the full account, you may create a subfolder and
+share it via a public link, adding a password. You can give the share
+full read / write and edit rights, so you can manage the content of the
+folder as you were logged in with your main account.</p>
+<p>If someone gets access to your share, only the data in this folder
+can then be manipulated.</p>
+</div>
+<div id="when-sharing-data-use-different-shares-for-writing-and-reading" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> When sharing data,
+use different shares for writing and reading</h2>
+<p>If you want to share data with other people, create public shares.
+Don’t give them your account credentials.</p>
+<p>You may create separated shares for reading and writing data if
+appropriate.</p>
+<ul>
+<li>make a folder <code>your_upload</code> and create a write-only share
+to receive data from other users</li>
+<li>make a folder <code>your_download</code> and create a read-only
+share to make data available to other users</li>
+</ul>
+<p>Then you can check the uploaded files and move them to the download
+folder, or process uploaded files and save results you want to share to
+the download folder.</p>
+<p>This will prevent that someone who gained access to the share to
+distribute illegal content. Even if illegal content might then get
+uploaded, no one else can download it.</p>
+</div>
+</div>
+<div id="some-tips-and-tricks" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Some tips and
+tricks</h1>
+<ul>
+<li>You can establish more than one connection and use different WebDAV
+servers simultaneously</li>
+<li>If you want to work only in a subdirectory, you can append it to the
+WebDAV URL
+<code>https://cloud.example.com/remote.php/webdav/my/sub/directory</code>.
+Then you don’t have to specify the full path when working with files
+this directory.</li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
