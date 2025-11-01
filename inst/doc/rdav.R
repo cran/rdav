@@ -76,3 +76,30 @@ knitr::opts_chunk$set(
 # wd_dir(r, "example", full_names = TRUE)
 # wd_dir(r, "example", as_df = TRUE)
 
+## ----eval=FALSE---------------------------------------------------------------
+# url <- ncl_baseurl("example.com", "johndoe")
+# r <- wd_connect(url)
+# 
+# shareurl <- ncl_shareurl_from_publicurl("https://example.com/s/aXaejfaheDde")
+# rs <- wd_connect(shareurl)
+# 
+
+## ----eval=FALSE---------------------------------------------------------------
+# r <- wd_connect(url)
+# 
+# # list all shares
+# ocs_child_shares(r)
+# 
+# # list the shares of a specific file or folder
+# ocs_shares(r, "folder_to_share")
+# 
+# # create an e-mail share
+# sh <- ocs_create_share_mail(r, "folder_to_share", "jackdoe@example.com")
+# 
+# # modify the share by adding a password and notifying the user
+# ocs_modify_share(r, sh$id, password = "super_secret")
+# ocs_send_mail(r, sh$id, password = "super_secret")
+# 
+# # delete the share
+# ocs_delete_share(r, sh$id)
+

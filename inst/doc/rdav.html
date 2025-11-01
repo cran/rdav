@@ -12,7 +12,7 @@
 
 <meta name="author" content="Gunther Krauss" />
 
-<meta name="date" content="2025-10-20" />
+<meta name="date" content="2025-10-31" />
 
 <title>rdav</title>
 
@@ -341,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">rdav</h1>
 <h4 class="author">Gunther Krauss</h4>
-<h4 class="date">October 20, 2025</h4>
+<h4 class="date">October 31, 2025</h4>
 
 
 
@@ -497,19 +497,79 @@ contenttype.</p>
 <span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="fu">wd_dir</span>(r, <span class="st">&quot;example&quot;</span>, <span class="at">as_df =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 </div>
-<div id="security-considerations" class="section level1" number="4">
-<h1><span class="header-section-number">4</span> Security
+<div id="additional-features-for-nextcloud-based-webdav-servers" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Additional features for
+Nextcloud based WebDAV servers</h1>
+<div id="handling-base-and-share-urls" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Handling base and
+share URLs</h2>
+<p>Base WebDAV entry point URLs for Nextcloud based servers are of the
+form
+<code>&lt;hostname&gt;/&lt;optional_subfolder&gt;/remote.php/dav/files/&lt;username&gt;</code>.
+Public share URLs of are of the form
+<code>&lt;hostname&gt;/&lt;optional_subfolder&gt;/s/&lt;token&gt;</code>
+where the token is used as username for authentication. The WebDAV entry
+point for public shares is of the form
+<code>&lt;hostname&gt;/&lt;optional_subfolder&gt;/public.php/dav/files/&lt;username&gt;</code>.
+The package provides some functions to deal with these URLs:</p>
+<ul>
+<li><code>ncl_baseurl(hostname, username)</code> creates the base url
+from host and user name.</li>
+<li><code>ncl_shareurl(hostname, username)</code> creates the base url
+for public shares from host and username (token).</li>
+<li><code>ncl_shareurl_from_publicurl(url)</code> creates the base url
+for public shares from the public share url.</li>
+<li><code>ncl_username_from_from_url</code> extracts the username from
+the base urls.</li>
+</ul>
+<p>This simplifies the connection to Nextcloud based servers:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="fu">ncl_baseurl</span>(<span class="st">&quot;example.com&quot;</span>, <span class="st">&quot;johndoe&quot;</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(url)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>shareurl <span class="ot">&lt;-</span> <span class="fu">ncl_shareurl_from_publicurl</span>(<span class="st">&quot;https://example.com/s/aXaejfaheDde&quot;</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>rs <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(shareurl)</span></code></pre></div>
+</div>
+<div id="managing-shares" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Managing shares</h2>
+<p>On Nextcloud based servers one can manage shares via the <a href="https://docs.nextcloud.com/server/stable/developer_manual/client_apis/OCS/ocs-api-overview.html">OCS
+API</a>.</p>
+<p>The package provides functions for</p>
+<ul>
+<li>getting infos about shares</li>
+<li>create, modify and delete shares</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(url)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co"># list all shares</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="fu">ocs_child_shares</span>(r)</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co"># list the shares of a specific file or folder</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="fu">ocs_shares</span>(r, <span class="st">&quot;folder_to_share&quot;</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co"># create an e-mail share</span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>sh <span class="ot">&lt;-</span> <span class="fu">ocs_create_share_mail</span>(r, <span class="st">&quot;folder_to_share&quot;</span>, <span class="st">&quot;jackdoe@example.com&quot;</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co"># modify the share by adding a password and notifying the user</span></span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="fu">ocs_modify_share</span>(r, sh<span class="sc">$</span>id, <span class="at">password =</span> <span class="st">&quot;super_secret&quot;</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="fu">ocs_send_mail</span>(r, sh<span class="sc">$</span>id, <span class="at">password =</span> <span class="st">&quot;super_secret&quot;</span>)</span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a></span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co"># delete the share</span></span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a><span class="fu">ocs_delete_share</span>(r, sh<span class="sc">$</span>id)</span></code></pre></div>
+</div>
+</div>
+<div id="security-considerations" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Security
 considerations</h1>
 <p>Here some thougths, how to better protect the data, if there is some
 risk that your password get’s disclosed by using it within scripts.</p>
-<div id="dont-put-passwords-in-your-code" class="section level2" number="4.1">
-<h2><span class="header-section-number">4.1</span> Don’t put passwords
+<div id="dont-put-passwords-in-your-code" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Don’t put passwords
 in your code</h2>
 <p>You should avoid putting passwords in your code. See the example in
 the sections above how to use system credential store.</p>
 </div>
-<div id="use-application-passwords-instead-of-account-passwords" class="section level2" number="4.2">
-<h2><span class="header-section-number">4.2</span> Use application
+<div id="use-application-passwords-instead-of-account-passwords" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Use application
 passwords instead of account passwords</h2>
 <p>Some cloud services offer you the possibility to create additional
 application passwords. If you use an application password with
@@ -517,8 +577,8 @@ application passwords. If you use an application password with
 delete the application password and create a new one. You don’t have to
 change then your account’s password.</p>
 </div>
-<div id="use-password-protected-public-shares-instead-direct-account" class="section level2" number="4.3">
-<h2><span class="header-section-number">4.3</span> Use password
+<div id="use-password-protected-public-shares-instead-direct-account" class="section level2" number="5.3">
+<h2><span class="header-section-number">5.3</span> Use password
 protected public shares instead direct account</h2>
 <p>Instead accessing the full account, you may create a subfolder and
 share it via a public link, adding a password. You can give the share
@@ -527,8 +587,8 @@ folder as you were logged in with your main account.</p>
 <p>If someone gets access to your share, only the data in this folder
 can then be manipulated.</p>
 </div>
-<div id="when-sharing-data-use-different-shares-for-writing-and-reading" class="section level2" number="4.4">
-<h2><span class="header-section-number">4.4</span> When sharing data,
+<div id="when-sharing-data-use-different-shares-for-writing-and-reading" class="section level2" number="5.4">
+<h2><span class="header-section-number">5.4</span> When sharing data,
 use different shares for writing and reading</h2>
 <p>If you want to share data with other people, create public shares.
 Don’t give them your account credentials.</p>
@@ -548,8 +608,8 @@ distribute illegal content. Even if illegal content might then get
 uploaded, no one else can download it.</p>
 </div>
 </div>
-<div id="some-tips-and-tricks" class="section level1" number="5">
-<h1><span class="header-section-number">5</span> Some tips and
+<div id="some-tips-and-tricks" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Some tips and
 tricks</h1>
 <ul>
 <li>You can establish more than one connection and use different WebDAV
