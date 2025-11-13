@@ -12,7 +12,7 @@
 
 <meta name="author" content="Gunther Krauss" />
 
-<meta name="date" content="2025-10-31" />
+<meta name="date" content="2025-11-13" />
 
 <title>rdav</title>
 
@@ -341,16 +341,16 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">rdav</h1>
 <h4 class="author">Gunther Krauss</h4>
-<h4 class="date">October 31, 2025</h4>
+<h4 class="date">November 13, 2025</h4>
 
 
 
-<p>“rdav” is a simple WebDAV client to upload and download data from
-cloud services.</p>
+<p>“rdav” is a simple <em>WebDAV</em> client to upload and download data
+from cloud services.</p>
 <div id="a-first-example" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> A first example</h1>
 <ul>
-<li>Load Data from a WebDAV server,</li>
+<li>Load Data from a <em>WebDAV</em> server,</li>
 <li>read the downloaded file,</li>
 <li>create a plot from the data,</li>
 <li>save the plot as image and</li>
@@ -358,7 +358,7 @@ cloud services.</p>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(rdav)</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(<span class="st">&quot;https://cloud.example.com/remote.php/webdav/&quot;</span>, <span class="st">&quot;myusername&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(<span class="st">&quot;https://example.com/remote.php/dav/files/myname/&quot;</span>, <span class="st">&quot;myname&quot;</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">wd_download</span>(r, <span class="st">&quot;data/data.csv&quot;</span>, <span class="st">&quot;localdata/data.csv&quot;</span>)</span>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;localdata/data.csv&quot;</span>)</span>
@@ -368,30 +368,45 @@ cloud services.</p>
 <span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
 <span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a></span>
 <span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="fu">wd_upload</span>(r, <span class="st">&quot;data_plot.png&quot;</span>, <span class="st">&quot;data_plot.png&quot;</span>)</span></code></pre></div>
+<p>On servers that are based on <em>Nextcloud</em>, you can also share
+the files</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">ocs_create_share_mail</span>(r, <span class="st">&quot;data_plot.png&quot;</span>, <span class="st">&quot;yourname@example.com&quot;</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>                      <span class="at">note =</span> <span class="st">&quot;Please check the plotted data.&quot;</span>)</span></code></pre></div>
 </div>
 <div id="webdav-owncloud-nextcloud" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> WebDAV, OwnCloud,
 NextCloud</h1>
-<p>The WebDAV protocol provides a framework to create, change and move
-documents on a server. Many cloud based storage systems provide WebDAV
-access, e.g. systems based on OwnCloud or NextCloud. This includes many
+<p>The <a href="https://www.rfc-editor.org/rfc/rfc4918"><em>WebDAV</em></a>
+protocol provides a framework to create, change and move documents on a
+server. Many cloud based storage systems provide <em>WebDAV</em> access,
+e.g. systems based on <em>OwnCloud</em> or <a href="https://nextcloud.com/"><em>Nextcloud</em></a>. This includes many
 cloud services offered by universities, organisations companies as well
 as many self hosted clouds on NAS or Raspberry Pi.</p>
-<p>To access WebDAV one typically needs the URL to the WebDAV server, an
-username and a password. There is also the possibility to share data via
-public links without password protection.</p>
-<p>Accounts on an OwnCloud or Nextcloud based server are typically
-addressed by WebDAV via the URL:
-<code>https://cloud.example.com/remote.php/webdav/</code>.</p>
+<p>To access <em>WebDAV</em> one typically needs the URL to the WebDAV
+server, an username and a password. There is also the possibility to
+share data via public links with or without password protection.</p>
+<p>Accounts on an <em>OwnCloud</em> or <em>Nextcloud</em> based server
+are typically addressed by WebDAV via the URL:
+<code>https://example.com/remote.php/dav/files/username/</code>.</p>
 <p>When sharing data via a public link from those servers, the link is
 typically of the form<br />
-<code>https://cloud.example.com/s/yxcFKRWBJqYYzp4/</code><br />
+<code>https://example.com/s/yxcFKRWBJqYYzp4/</code><br />
 and will be used to access the files via a web browser. To access a
-public share via WebDAV, one has to use the URL:<br />
-<code>https://cloud.example.com/public.php/webdav/</code><br />
+public share via <em>WebDAV</em>, one has to use the URL:<br />
+<code>https://example.com/public.php/dav/files/username/</code><br />
 As username one has to use the share token, i. e. the cryptic number and
 letter string of the share link following <code>/s/</code> - in the
 example above the username would be <code>yxcFKRWBJqYYzp4</code>.</p>
+<p>The package provides functions</p>
+<ul>
+<li>to manage files on a <em>WebDAV</em> server (function names starting
+with <code>wd_</code>)</li>
+<li>handle <em>Nextcloud</em> specific URLs (function names starting
+with <code>ncl_</code>)</li>
+<li>manage shares on <em>Nextcloud</em> folder (via <a href="https://docs.nextcloud.com/server/stable/developer_manual/client_apis/OCS/ocs-api-overview.html">OCS
+API</a>) , function names starting with <code>ocs_</code>)</li>
+</ul>
 </div>
 <div id="using-the-package-functions" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Using the package
@@ -399,36 +414,36 @@ functions</h1>
 <div id="establishing-the-connection" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Establishing the
 connection</h2>
-<p>To interact with the WebDAV server, you have to create a connection
-via <code>wd_connect</code> by supplying the URL, username and
-password.</p>
+<p>To interact with the <em>WebDAV</em> server, you have to create a
+connection via <code>wd_connect</code> by supplying the URL, username
+and password.</p>
 <p>In an interactive R session, you may omit the password when calling
 <code>wd_connect</code>. Then R will ask you to type the password.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># no password given, R will ask.</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(<span class="at">url =</span> <span class="st">&quot;https://cloud.example.com/remote.php/webdav/&quot;</span>,</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>                <span class="at">username =</span> <span class="st">&quot;myusername&quot;</span>)</span></code></pre></div>
-<p>When using WebDAV in a script, you have to pass the password to
-<code>wd_connect</code>. It is not good practice, to write the password
-literally in your script</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Don&quot;t do this! You would reveal your super secret password to others when</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co"># sharing your script.</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(<span class="at">url =</span> <span class="st">&quot;https://cloud.example.com/remote.php/webdav/&quot;</span>,</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>                <span class="at">username =</span> <span class="st">&quot;myusername&quot;</span>,</span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>                <span class="at">password =</span> <span class="st">&quot;12345&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># no password given, R will ask.</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(<span class="at">url =</span> <span class="st">&quot;https://cloud.example.com/remote.php/dav/files/myname&quot;</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>                <span class="at">username =</span> <span class="st">&quot;myname&quot;</span>)</span></code></pre></div>
+<p>When using <em>WebDAV</em> in a script, you have to pass the password
+to <code>wd_connect</code>. It is not good practice, to write the
+password literally in your script</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Don&quot;t do this! You would reveal your super secret password to others when</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># sharing your script.</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(<span class="at">url =</span> <span class="st">&quot;https://cloud.example.com/remote.php/dav/files/myname/&quot;</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>                <span class="at">username =</span> <span class="st">&quot;myname&quot;</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>                <span class="at">password =</span> <span class="st">&quot;12345&quot;</span>)</span></code></pre></div>
 <p>Better use your system”s credential store (i. e. the password will be
 stored encrypted in your user account). You may use the package <a href="https://cran.r-project.org/package=keyring"><code>keyring</code></a>
 to access the system”s credential store.</p>
 <p>You once have to set a key / password combination on your computer by
 calling:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>keyring<span class="sc">::</span><span class="fu">key_set</span>(<span class="st">&quot;mycloud&quot;</span>, <span class="st">&quot;myusername&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>keyring<span class="sc">::</span><span class="fu">key_set</span>(<span class="st">&quot;mycloud&quot;</span>, <span class="st">&quot;myusername&quot;</span>)</span></code></pre></div>
 <p>You will be asked for the password and then the credentials are
 stored on your system.</p>
 <p>In your scripts you can then use
 <code>keyring::get_key(&quot;mycloud&quot;,&quot;myusername&quot;)</code> to pass the stored
 password to <code>wd_connect</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(<span class="at">url =</span> <span class="st">&quot;https://cloud.example.com/remote.php/webdav/&quot;</span>,</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                <span class="at">username =</span> <span class="st">&quot;myusername&quot;</span>,</span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                <span class="at">password =</span> keyring<span class="sc">::</span><span class="fu">get_key</span>(<span class="st">&quot;mycloud&quot;</span>, <span class="st">&quot;myusername&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(<span class="at">url =</span> <span class="st">&quot;https://cloud.example.com/remote.php/dav/files/myname&quot;</span>,</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                <span class="at">username =</span> <span class="st">&quot;myname&quot;</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>                <span class="at">password =</span> keyring<span class="sc">::</span><span class="fu">get_key</span>(<span class="st">&quot;mycloud&quot;</span>, <span class="st">&quot;myusername&quot;</span>))</span></code></pre></div>
 </div>
 <div id="downloading-and-uploading-data" class="section level2" number="3.2">
 <h2><span class="header-section-number">3.2</span> Downloading and
@@ -436,26 +451,26 @@ uploading data</h2>
 <p>To download a file, you have to give the path of the filename on the
 server, as well as the path to the location where you want to store the
 file on your computer.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">wd_download</span>(r, <span class="st">&quot;data/data.csv&quot;</span>, <span class="st">&quot;localdata/data_new.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">wd_download</span>(r, <span class="st">&quot;data/data.csv&quot;</span>, <span class="st">&quot;localdata/data_new.csv&quot;</span>)</span></code></pre></div>
 <p>Instead of giving the full path of the target file, you can use only
 the directory name. Then the file will be stored in that folder with the
 same name as it has on the server.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">wd_download</span>(r, <span class="st">&quot;data/data.csv&quot;</span>, <span class="st">&quot;localdata&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">wd_download</span>(r, <span class="st">&quot;data/data.csv&quot;</span>, <span class="st">&quot;localdata&quot;</span>)</span></code></pre></div>
 <p>You can download full directories. All the data within the directory,
 including subdirectories will be downloaded.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">wd_download</span>(r, <span class="st">&quot;data&quot;</span>, <span class="st">&quot;localdata&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">wd_download</span>(r, <span class="st">&quot;data&quot;</span>, <span class="st">&quot;localdata&quot;</span>)</span></code></pre></div>
 <p>For uploading data from your computer, you have to use
 <code>wd_upload</code> in a similar way as <code>wd_download</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">wd_upload</span>(r, <span class="st">&quot;localdata/data.csv&quot;</span>, <span class="st">&quot;data/data_new.csv&quot;</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">wd_upload</span>(r, <span class="st">&quot;localdata/data.csv&quot;</span>, <span class="st">&quot;data&quot;</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="fu">wd_upload</span>(r, <span class="st">&quot;localdata&quot;</span>, <span class="st">&quot;data&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">wd_upload</span>(r, <span class="st">&quot;localdata/data.csv&quot;</span>, <span class="st">&quot;data/data_new.csv&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">wd_upload</span>(r, <span class="st">&quot;localdata/data.csv&quot;</span>, <span class="st">&quot;data&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">wd_upload</span>(r, <span class="st">&quot;localdata&quot;</span>, <span class="st">&quot;data&quot;</span>)</span></code></pre></div>
 <p>Notice:</p>
 <ul>
 <li>If you upload / download files into a directory, the target
 directory has to exist already.</li>
 <li>If you upload / download a directory, then the target directory will
 be created, if it does not exist. However, the parent directory have to
-exist already</li>
+exist already.</li>
 </ul>
 </div>
 <div id="copy-move-delete-files-on-the-server" class="section level2" number="3.3">
@@ -468,16 +483,16 @@ move operation, unless you specify the parameter
 <code>overwrite=FALSE</code>. Notice: Some WebDAV servers may behave
 differently and won’t overwrite files. In these case you have to delete
 files first.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">wd_copy</span>(r, <span class="st">&quot;actual.csv&quot;</span>, <span class="st">&quot;backup.csv&quot;</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">wd_move</span>(r, <span class="st">&quot;backup.csv&quot;</span>, <span class="st">&quot;backup-2024-02-27.csv&quot;</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">wd_move</span>(r, <span class="st">&quot;backup.csv&quot;</span>, <span class="st">&quot;backup-2024-02-27.csv&quot;</span>, <span class="at">overwrite =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">wd_delete</span>(r, <span class="st">&quot;obsolete.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">wd_copy</span>(r, <span class="st">&quot;actual.csv&quot;</span>, <span class="st">&quot;backup.csv&quot;</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">wd_move</span>(r, <span class="st">&quot;backup.csv&quot;</span>, <span class="st">&quot;backup-2024-02-27.csv&quot;</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="fu">wd_move</span>(r, <span class="st">&quot;backup.csv&quot;</span>, <span class="st">&quot;backup-2024-02-27.csv&quot;</span>, <span class="at">overwrite =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="fu">wd_delete</span>(r, <span class="st">&quot;obsolete.csv&quot;</span>)</span></code></pre></div>
 <p>You can create new directories.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">wd_mkdir</span>(r, <span class="st">&quot;data/soil/new&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">wd_mkdir</span>(r, <span class="st">&quot;data/soil/new&quot;</span>)</span></code></pre></div>
 <p>Notice that parent directories have to exist. If not, you have to
 create them first</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">wd_mkdir</span>(r, <span class="st">&quot;data/soil&quot;</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">wd_mkdir</span>(r, <span class="st">&quot;data/soil/new&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">wd_mkdir</span>(r, <span class="st">&quot;data/soil&quot;</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">wd_mkdir</span>(r, <span class="st">&quot;data/soil/new&quot;</span>)</span></code></pre></div>
 </div>
 <div id="get-informations-about-files-and-directories" class="section level2" number="3.4">
 <h2><span class="header-section-number">3.4</span> Get informations
@@ -490,11 +505,11 @@ paths.</p>
 <code>as_df = TRUE</code>. You will then get a data.frame with
 additional columns like size, last modification date and
 contenttype.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a></span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">wd_dir</span>(r) <span class="co"># get content of main folder</span></span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="fu">wd_dir</span>(r, <span class="st">&quot;example&quot;</span>)</span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="fu">wd_dir</span>(r, <span class="st">&quot;example&quot;</span>, <span class="at">full_names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="fu">wd_dir</span>(r, <span class="st">&quot;example&quot;</span>, <span class="at">as_df =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">wd_dir</span>(r) <span class="co"># get content of main folder</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="fu">wd_dir</span>(r, <span class="st">&quot;example&quot;</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="fu">wd_dir</span>(r, <span class="st">&quot;example&quot;</span>, <span class="at">full_names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="fu">wd_dir</span>(r, <span class="st">&quot;example&quot;</span>, <span class="at">as_df =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="additional-features-for-nextcloud-based-webdav-servers" class="section level1" number="4">
@@ -503,13 +518,13 @@ Nextcloud based WebDAV servers</h1>
 <div id="handling-base-and-share-urls" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Handling base and
 share URLs</h2>
-<p>Base WebDAV entry point URLs for Nextcloud based servers are of the
-form
+<p>Base <em>WebDAV</em> entry point URLs for Nextcloud based servers are
+of the form
 <code>&lt;hostname&gt;/&lt;optional_subfolder&gt;/remote.php/dav/files/&lt;username&gt;</code>.
 Public share URLs of are of the form
 <code>&lt;hostname&gt;/&lt;optional_subfolder&gt;/s/&lt;token&gt;</code>
-where the token is used as username for authentication. The WebDAV entry
-point for public shares is of the form
+where the token is used as username for authentication. The
+<em>WebDAV</em> entry point for public shares is of the form
 <code>&lt;hostname&gt;/&lt;optional_subfolder&gt;/public.php/dav/files/&lt;username&gt;</code>.
 The package provides some functions to deal with these URLs:</p>
 <ul>
@@ -523,38 +538,47 @@ for public shares from the public share url.</li>
 the base urls.</li>
 </ul>
 <p>This simplifies the connection to Nextcloud based servers:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="fu">ncl_baseurl</span>(<span class="st">&quot;example.com&quot;</span>, <span class="st">&quot;johndoe&quot;</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(url)</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>shareurl <span class="ot">&lt;-</span> <span class="fu">ncl_shareurl_from_publicurl</span>(<span class="st">&quot;https://example.com/s/aXaejfaheDde&quot;</span>)</span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>rs <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(shareurl)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="fu">ncl_baseurl</span>(<span class="st">&quot;example.com&quot;</span>, <span class="st">&quot;johndoe&quot;</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(url)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>shareurl <span class="ot">&lt;-</span> <span class="fu">ncl_shareurl_from_publicurl</span>(<span class="st">&quot;https://example.com/s/aXaejfaheDde&quot;</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>rs <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(shareurl)</span></code></pre></div>
 </div>
 <div id="managing-shares" class="section level2" number="4.2">
 <h2><span class="header-section-number">4.2</span> Managing shares</h2>
-<p>On Nextcloud based servers one can manage shares via the <a href="https://docs.nextcloud.com/server/stable/developer_manual/client_apis/OCS/ocs-api-overview.html">OCS
-API</a>.</p>
+<p>On <em>Nextcloud</em> based servers one can manage shares via the
+<em>OCS API</em>.</p>
 <p>The package provides functions for</p>
 <ul>
 <li>getting infos about shares</li>
 <li>create, modify and delete shares</li>
 </ul>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(url)</span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co"># list all shares</span></span>
-<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="fu">ocs_child_shares</span>(r)</span>
-<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co"># list the shares of a specific file or folder</span></span>
-<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="fu">ocs_shares</span>(r, <span class="st">&quot;folder_to_share&quot;</span>)</span>
-<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a></span>
-<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co"># create an e-mail share</span></span>
-<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>sh <span class="ot">&lt;-</span> <span class="fu">ocs_create_share_mail</span>(r, <span class="st">&quot;folder_to_share&quot;</span>, <span class="st">&quot;jackdoe@example.com&quot;</span>)</span>
-<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a></span>
-<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co"># modify the share by adding a password and notifying the user</span></span>
-<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="fu">ocs_modify_share</span>(r, sh<span class="sc">$</span>id, <span class="at">password =</span> <span class="st">&quot;super_secret&quot;</span>)</span>
-<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="fu">ocs_send_mail</span>(r, sh<span class="sc">$</span>id, <span class="at">password =</span> <span class="st">&quot;super_secret&quot;</span>)</span>
-<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a></span>
-<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co"># delete the share</span></span>
-<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a><span class="fu">ocs_delete_share</span>(r, sh<span class="sc">$</span>id)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(url)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="co"># list all shares</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="fu">ocs_child_shares</span>(r)</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="co"># list the shares of a specific file or folder</span></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="fu">ocs_shares</span>(r, <span class="st">&quot;folder_to_share&quot;</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="co"># create an e-mail share</span></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>sh <span class="ot">&lt;-</span> <span class="fu">ocs_create_share_mail</span>(r, <span class="st">&quot;folder_to_share&quot;</span>, <span class="st">&quot;jackdoe@example.com&quot;</span>)</span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a><span class="co"># modify the share by adding a password and notifying the user</span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a><span class="fu">ocs_modify_share</span>(r, sh<span class="sc">$</span>id, <span class="at">password =</span> <span class="st">&quot;super_secret&quot;</span>)</span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="fu">ocs_send_mail</span>(r, sh<span class="sc">$</span>id, <span class="at">password =</span> <span class="st">&quot;super_secret&quot;</span>)</span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a><span class="co"># delete the share</span></span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a><span class="fu">ocs_delete_share</span>(r, sh<span class="sc">$</span>id)</span></code></pre></div>
+</div>
+<div id="find-users-you-want-to-share-with" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Find users you want
+to share with</h2>
+<p>You can search your <em>Nextcloud</em> based server for other users
+or groups on that server as well as remote (e.g. federated shares or
+e-mail shares that are known to your server).</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">wd_connect</span>(url)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">ocs_find_users</span>(r, <span class="st">&quot;Doe, John&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="security-considerations" class="section level1" number="5">
@@ -577,9 +601,9 @@ application passwords. If you use an application password with
 delete the application password and create a new one. You don’t have to
 change then your account’s password.</p>
 </div>
-<div id="use-password-protected-public-shares-instead-direct-account" class="section level2" number="5.3">
+<div id="use-password-protected-public-shares-instead-of-main-account" class="section level2" number="5.3">
 <h2><span class="header-section-number">5.3</span> Use password
-protected public shares instead direct account</h2>
+protected public shares instead of main account</h2>
 <p>Instead accessing the full account, you may create a subfolder and
 share it via a public link, adding a password. You can give the share
 full read / write and edit rights, so you can manage the content of the
@@ -604,8 +628,8 @@ share to make data available to other users</li>
 folder, or process uploaded files and save results you want to share to
 the download folder.</p>
 <p>This will prevent that someone who gained access to the share to
-distribute illegal content. Even if illegal content might then get
-uploaded, no one else can download it.</p>
+distribute unwanted or illegal content. Even if unwanted or illegal
+content might get uploaded, no one else can download it.</p>
 </div>
 </div>
 <div id="some-tips-and-tricks" class="section level1" number="6">
@@ -614,11 +638,13 @@ tricks</h1>
 <ul>
 <li>You can establish more than one connection and use different WebDAV
 servers simultaneously</li>
-<li>If you want to work only in a subdirectory, you can append it to the
-WebDAV URL
-<code>https://cloud.example.com/remote.php/webdav/my/sub/directory</code>.
-Then you don’t have to specify the full path when working with files
-this directory.</li>
+<li>If you want to work only in a subdirectory,
+e.g. <code>/sub/dir</code>, you can append it to the <em>WebDAV</em> URL
+<code>https://cloud.example.com/remote.php/dav/files/myname/sub/dir</code>.
+Then you don’t have to specify the full path when working with files in
+this directory with <code>wd_*</code> functions.
+<strong>Notice</strong>: for managing shares via <code>ocs_*</code>
+functions you still need to give the full path to files or folders.</li>
 </ul>
 </div>
 

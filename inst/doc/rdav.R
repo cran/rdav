@@ -10,7 +10,7 @@ knitr::opts_chunk$set(
 ## ----eval=FALSE---------------------------------------------------------------
 # library(rdav)
 # 
-# r <- wd_connect("https://cloud.example.com/remote.php/webdav/", "myusername")
+# r <- wd_connect("https://example.com/remote.php/dav/files/myname/", "myname")
 # 
 # wd_download(r, "data/data.csv", "localdata/data.csv")
 # data <- read.table("localdata/data.csv")
@@ -23,23 +23,28 @@ knitr::opts_chunk$set(
 # 
 
 ## ----eval=FALSE---------------------------------------------------------------
+# 
+# ocs_create_share_mail(r, "data_plot.png", "yourname@example.com",
+#                       note = "Please check the plotted data.")
+
+## ----eval=FALSE---------------------------------------------------------------
 # # no password given, R will ask.
-# r <- wd_connect(url = "https://cloud.example.com/remote.php/webdav/",
-#                 username = "myusername")
+# r <- wd_connect(url = "https://cloud.example.com/remote.php/dav/files/myname",
+#                 username = "myname")
 
 ## ----eval=FALSE---------------------------------------------------------------
 # # Don"t do this! You would reveal your super secret password to others when
 # # sharing your script.
-# r <- wd_connect(url = "https://cloud.example.com/remote.php/webdav/",
-#                 username = "myusername",
+# r <- wd_connect(url = "https://cloud.example.com/remote.php/dav/files/myname/",
+#                 username = "myname",
 #                 password = "12345")
 
 ## ----eval=FALSE---------------------------------------------------------------
 # keyring::key_set("mycloud", "myusername")
 
 ## ----eval=FALSE---------------------------------------------------------------
-# r <- wd_connect(url = "https://cloud.example.com/remote.php/webdav/",
-#                 username = "myusername",
+# r <- wd_connect(url = "https://cloud.example.com/remote.php/dav/files/myname",
+#                 username = "myname",
 #                 password = keyring::get_key("mycloud", "myusername"))
 
 ## ----eval=FALSE---------------------------------------------------------------
@@ -102,4 +107,8 @@ knitr::opts_chunk$set(
 # 
 # # delete the share
 # ocs_delete_share(r, sh$id)
+
+## ----eval=FALSE---------------------------------------------------------------
+# r <- wd_connect(url)
+# ocs_find_users(r, "Doe, John")
 

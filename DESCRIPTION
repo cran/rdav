@@ -1,8 +1,8 @@
 Package: rdav
 Type: Package
 Title: Simple 'WebDAV' Client
-Version: 0.2.0
-Date: 2025-10-31
+Version: 0.2.2
+Date: 2025-11-13
 Authors@R: person(given = "Gunther",
                     family = "Krauss",
                     role = c("aut", "cre"),
@@ -24,7 +24,7 @@ RoxygenNote: 7.3.3
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 NeedsCompilation: no
-Packaged: 2025-10-31 22:58:39 UTC; k
+Packaged: 2025-11-13 22:03:41 UTC; k
 Author: Gunther Krauss [aut, cre]
 Repository: CRAN
-Date/Publication: 2025-11-01 21:30:02 UTC
+Date/Publication: 2025-11-13 22:20:09 UTC
