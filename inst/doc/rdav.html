@@ -12,7 +12,7 @@
 
 <meta name="author" content="Gunther Krauss" />
 
-<meta name="date" content="2025-11-13" />
+<meta name="date" content="2025-12-03" />
 
 <title>rdav</title>
 
@@ -341,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">rdav</h1>
 <h4 class="author">Gunther Krauss</h4>
-<h4 class="date">November 13, 2025</h4>
+<h4 class="date">December 03, 2025</h4>
 
 
 
@@ -638,13 +638,10 @@ tricks</h1>
 <ul>
 <li>You can establish more than one connection and use different WebDAV
 servers simultaneously</li>
-<li>If you want to work only in a subdirectory,
-e.g. <code>/sub/dir</code>, you can append it to the <em>WebDAV</em> URL
-<code>https://cloud.example.com/remote.php/dav/files/myname/sub/dir</code>.
-Then you don’t have to specify the full path when working with files in
-this directory with <code>wd_*</code> functions.
-<strong>Notice</strong>: for managing shares via <code>ocs_*</code>
-functions you still need to give the full path to files or folders.</li>
+<li>If you want to work in a subdirectory, e.g. <code>/sub/dir</code>,
+you can set it via the <code>directory</code> parameter on
+<code>wd_connect</code> or use <code>wd_setwd</code> to change the
+working directory.</li>
 </ul>
 </div>
 
